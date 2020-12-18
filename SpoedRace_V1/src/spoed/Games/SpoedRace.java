@@ -5,17 +5,43 @@
  */
 package spoed.Games;
 
+import java.awt.Dimension;
+import javax.swing.JFrame;
+import javax.swing.JLayeredPane;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author TTRS_And_BTJB
  */
 public class SpoedRace {
 
-    /**
-     * @param args the command line arguments
-     */
+    private static final int WIDTH = 640;
+    private static final int HEIGHT = 480;
+    
+    private static void initAndShowGUI() {
+        
+        JFrame frame = new JFrame("SPOED 1.0");
+        frame.setSize(WIDTH, HEIGHT);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        
+        GLevel_Test level = new GLevel_Test(WIDTH, HEIGHT);
+        level.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        level.setBounds(0, 0, WIDTH, HEIGHT);
+        
+        JLayeredPane paneLayer = frame.getLayeredPane();
+        paneLayer.add(level, 0);
+    }
+    
     public static void main(String[] args) {
-        // TODO code application logic here
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                initAndShowGUI();
+            }
+        });
     }
     
 }

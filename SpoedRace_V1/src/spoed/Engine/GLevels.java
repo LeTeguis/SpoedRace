@@ -5,10 +5,16 @@
  */
 package spoed.Engine;
 
+import java.awt.BorderLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author TTRS_And_BTJB
  */
-public class GLevels {
-    
+public abstract class GLevels extends JPanel{
+    public GLevels(int width, int height){
+        this.setLayout(new BorderLayout());
+        this.setSize(width, height);
+    }
 }

@@ -5,10 +5,16 @@
  */
 package spoed.Games;
 
+import spoed.Engine.GLevels;
+
 /**
  *
  * @author TTRS_And_BTJB
  */
-public class GLevel_Test {
+public class GLevel_Test extends GLevels{
+    
+    public GLevel_Test(int width, int height) {
+        super(width, height);
+    }
     
 }
