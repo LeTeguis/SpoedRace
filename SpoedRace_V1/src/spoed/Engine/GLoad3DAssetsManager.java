@@ -44,6 +44,11 @@ public class GLoad3DAssetsManager {
         }
         return null;
     }
+    public static GMesh getMesh(String name, String newName){
+        GMesh mesh = getMesh(name);
+        changeNameMesh(getMesh(name), newName);
+        return mesh;
+    }
     public static GMesh getMesh(String name){
         Link mesh= getStaticMesh(name);
         if(mesh == null)
@@ -56,7 +61,7 @@ public class GLoad3DAssetsManager {
         return newMesh;
     }
     public static void changeNameMesh(GMesh mesh, String name){
-        if(allMesh.isEmpty())
+        if(allMesh.isEmpty() || mesh == null)
             return;
         if(allMesh.contains(mesh)){
             String realName = name;
