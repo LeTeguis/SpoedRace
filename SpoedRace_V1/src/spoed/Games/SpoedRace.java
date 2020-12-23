@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
+import spoed.Engine.*;
 
 /**
  *
@@ -30,7 +31,7 @@ public class SpoedRace {
         GLevel_Test level = new GLevel_Test(WIDTH, HEIGHT);
         level.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         level.setBounds(0, 0, WIDTH, HEIGHT);
-        
+
         JLayeredPane paneLayer = frame.getLayeredPane();
         paneLayer.add(level, 0);
     }
