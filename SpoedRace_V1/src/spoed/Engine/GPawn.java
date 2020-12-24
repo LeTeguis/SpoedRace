@@ -7,7 +7,6 @@ package spoed.Engine;
 
 import java.util.LinkedList;
 import javax.media.j3d.BranchGroup;
-import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector3d;

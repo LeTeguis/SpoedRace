@@ -35,6 +35,11 @@ public class GAbstract /*extends Thread*/{
         /**/timer = createTimer ();
         timer.start ();
     }
+    public void restart(){
+        temps_zero = System.currentTimeMillis();
+        temps_actuel = 0;
+        temps_precedent = 0;
+    }
     public void addGAbstract(GAbstract.GIAbstract gie){
         giLoop.add(gie);
     }

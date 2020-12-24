@@ -8,6 +8,7 @@ package spoed.Games;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import spoed.Engine.GActor;
 import spoed.Engine.GLoad3DAssetsManager;
@@ -19,18 +20,33 @@ import spoed.Engine.GTransform;
  */
 public class GCar extends GActor{
     private String Model = null;
-    private double vitesseTranslation = 0.2;
+    private double vitesseTranslation = 10.0;
     private Vector3d vitesseRotation = new Vector3d(0, 0, 0);
     private Deplacement direction = Deplacement.AUCUN;
     private Orientation orientation = Orientation.AUCUN;
     
     public GCar() {
         super();
-        this.addMesh(GLoad3DAssetsManager.getMesh("voiture"));
+        /*this.addMesh(GLoad3DAssetsManager.getMesh("voiture"));
+        allMesh.getLast().setPosition(new Point3d(0.004292, 0.849326, 0.114546));
         this.addMesh(GLoad3DAssetsManager.getMesh("roueavantg"));
+        allMesh.getLast().setPosition(new Point3d(0.498462, 0.331681, 1.33142));
         this.addMesh(GLoad3DAssetsManager.getMesh("roueavantd"));
+        allMesh.getLast().setPosition(new Point3d(-0.498462, 0.331681, 1.33142));
         this.addMesh(GLoad3DAssetsManager.getMesh("rouearrierg"));
+        allMesh.getLast().setPosition(new Point3d(0.498462, 0.331681, -0.93888));
         this.addMesh(GLoad3DAssetsManager.getMesh("rouearrierd"));
+        allMesh.getLast().setPosition(new Point3d(-0.498462, 0.331681, -0.93888));*/
+        this.addMesh(GLoad3DAssetsManager.getMesh("bugatti_corps"));
+        //allMesh.getLast().setPosition(new Point3d(0.004292, 0.849326, 0.114546));
+        this.addMesh(GLoad3DAssetsManager.getMesh("bugatti_rfl"));
+        //allMesh.getLast().setPosition(new Point3d(0.498462, 0.331681, 1.33142));
+        this.addMesh(GLoad3DAssetsManager.getMesh("bugatti_rfr"));
+        //allMesh.getLast().setPosition(new Point3d(-0.498462, 0.331681, 1.33142));
+        this.addMesh(GLoad3DAssetsManager.getMesh("bugatti_rbl"));
+        //allMesh.getLast().setPosition(new Point3d(0.498462, 0.331681, -0.93888));
+        this.addMesh(GLoad3DAssetsManager.getMesh("bugatti_rbr"));
+        //allMesh.getLast().setPosition(new Point3d(-0.498462, 0.331681, -0.93888));
     }
     
     @Override
@@ -48,11 +64,11 @@ public class GCar extends GActor{
     @Override
     public void keyPressed(int code, boolean alt, boolean ctrl, boolean shift) {
         if(code == KeyEvent.VK_UP){
-            vitesseTranslation = 0.2;
+            vitesseTranslation = (vitesseTranslation < 0)?-vitesseTranslation:vitesseTranslation;
             direction = Deplacement.AVANCER;
         }
         if(code == KeyEvent.VK_DOWN){
-            vitesseTranslation = -0.2;
+            vitesseTranslation = (vitesseTranslation < 0)?vitesseTranslation:-vitesseTranslation;;
             direction = Deplacement.RECULER;
         }
         if(code == KeyEvent.VK_LEFT){
@@ -83,14 +99,23 @@ public class GCar extends GActor{
     }
     @Override
     public void update(long times, long deltaTime) {
-        if(orientation != Orientation.AUCUN)
-            this.localRotation(GTransform.multily(vitesseRotation, 0.25));
         if(direction != Deplacement.AUCUN){
-            /*if(direction == Deplacement.AVANCER)
-                allMesh.get(1).localRotationX(1);
-            else
-                allMesh.get(1).localRotationX(-1);*/
-            this.move(GTransform.multily(GTransform.multily(this.transform.forwardVector(),vitesseTranslation), 0.25));
+            if(orientation != Orientation.AUCUN)
+                this.localRotation(GTransform.multily(vitesseRotation, 0.25));
+            if(direction == Deplacement.AVANCER){
+                allMesh.get(1).localRotationX(5);
+                allMesh.get(2).localRotationX(5);
+                allMesh.get(3).localRotationX(5);
+                allMesh.get(4).localRotationX(5);
+            }
+            else{
+                allMesh.get(1).localRotationX(-5);
+                allMesh.get(2).localRotationX(-5);
+                allMesh.get(3).localRotationX(-5);
+                allMesh.get(4).localRotationX(-5);
+            }
+            System.out.println(vitesseTranslation*(deltaTime/1000.));
+            this.move(GTransform.multily(this.transform.forwardVector(),vitesseTranslation*(deltaTime/1000.)));
         }
     }
     public enum Deplacement{

@@ -282,7 +282,7 @@ public class GCamera implements GEvent.GIEvent, GAbstract.GIAbstract, GITransfor
 
     @Override
     public void localRotationY(double Oy) {
-        transform.localRotationZ(Oy);
+        transform.localRotationY(Oy);
     }
 
     @Override

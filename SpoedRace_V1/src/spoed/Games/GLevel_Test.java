@@ -51,11 +51,15 @@ public class GLevel_Test extends GLevels{
         GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Decor1/decor1.obj");
         GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/obs.obj");
         GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/voiture.obj");
+        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/bugatti_1.obj");
         GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/direction.obj");
         cameraTPS = new GCamera();
         cameraTPS.init();
-        cameraTPS.setPosition(new Point3d(6f, 0f, 0f));
-        cameraTPS.setLocalRotation(new Vector3d(0, 90, 0));
+        //cameraTPS.setPosition(new Point3d(6f, 0f, 0f));
+        cameraTPS.setPosition(new Point3d(0f, 2.5f, -6f));
+        cameraTPS.localRotationX(-15);
+        cameraTPS.localRotationY(180);
+        //cameraTPS.setLocalRotation(new Vector3d(-15, 180, 0));
 //        cameraTPS.lookAt();
         addCamera(cameraTPS);
         super.setScene();
@@ -112,11 +116,12 @@ public class GLevel_Test extends GLevels{
         car.001_plane.003
         */
         
-        DirectionalLight soleil = new DirectionalLight(new Color3f(255, 234, 159), new Vector3f(0,0,0));
+        //DirectionalLight soleil = new DirectionalLight(new Color3f(255, 234, 159), new Vector3f(0,0,0));
         
         // Ajout de la lumiere a l'objet racine de la scene 3D
-        parent.addChild(/**/createLight()/** /createSpotLight(new Vector3d(0, 0, 0))/**/);
-        System.out.println(GEvent.getInstance().getParent()+"****************");
+        //parent.addChild(/**/createLight()/** /createSpotLight(new Vector3d(0, 0, 0))/**/);
+        GLight lumier = new GLight();
+        parent.addChild(lumier.getParent());
         parent.addChild(GEvent.getInstance());
         return parent;
     }
@@ -131,10 +136,8 @@ public class GLevel_Test extends GLevels{
         objTrans.setCapability (TransformGroup.ENABLE_PICK_REPORTING) ;
         Color3f spotLightColor = new Color3f (1.0f, 0.0f, 0.0f) ;
         Cone cone = new Cone (0.1f, 0.15f) ;
-        cone.getShape (0).getGeometry ().setCapability
-        (Geometry.ALLOW_INTERSECT) ;
-        cone.getShape (1).getGeometry ().setCapability
-        (Geometry.ALLOW_INTERSECT) ;
+        cone.getShape (0).getGeometry ().setCapability(Geometry.ALLOW_INTERSECT) ;
+        cone.getShape (1).getGeometry ().setCapability(Geometry.ALLOW_INTERSECT) ;
         objTrans.addChild (cone) ;
         Point3f position = new Point3f (0.0f, 0.0f, 0.0f) ;
         Point3f attenuation = new Point3f (1.0f, 1.0f, 1.0f) ;

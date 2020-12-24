@@ -5,7 +5,9 @@
  */
 package spoed.Engine;
 
+import com.sun.j3d.loaders.Loader;
 import com.sun.j3d.loaders.Scene;
+import com.sun.j3d.loaders.lw3d.Lw3dLoader;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -50,12 +52,12 @@ public class GLoad3DAssetsManager {
         return mesh;
     }
     public static GMesh getMesh(String name){
-        Link mesh= getStaticMesh(name);
+        Link mesh = getStaticMesh(name);
         if(mesh == null)
             return null;
         BranchGroup bg = new BranchGroup();
         bg.addChild(mesh);
-        GMesh newMesh = new GMesh(name, bg);
+        GMesh newMesh = new GMesh(name, bg, name);
         changeNameMesh(newMesh, name);
         allMesh.add(newMesh);
         return newMesh;
@@ -150,29 +152,31 @@ public class GLoad3DAssetsManager {
         }
     }
     private Scene loadWavefrontObject(String filename) {
-        ObjectFile waveFrontObject = new ObjectFile(ObjectFile.RESIZE);
+        ObjectFile waveFrontObject = new ObjectFile(ObjectFile.TRIANGULATE);
+        Loader lw3dLoader = new Lw3dLoader(Loader.LOAD_ALL);
         Scene scene = null;
-        int error = 0;
-
+        
+        File file = new File(filename);
         try {
-            scene = waveFrontObject.load(filename);
+            //scene = waveFrontObject.load(file.toURI().toURL());
+            //scene = waveFrontObject.load(filename);
+            //scene = lw3dLoader.load(file.toURI().toURL());
+            scene = lw3dLoader.load(filename);
         }catch (Exception e) {
             System.err.println(e+"*****************");
             System.exit(1);
         }
-
-        if (error != 0)
-          System.exit(error);
-
         return scene;
     }
     private static void listscenenamedobjects(Scene scene) {
         Map<String, Shape3D> namemap = scene.getNamedObjects(); 
+        int k = 0;
         for (String name : namemap.keySet()) {
             System.out.println(name);
             Shape3D shape = namemap.get(name);
             scene.getSceneGroup().removeChild(namemap.get(name));
-            
+            Enumeration enumerate = shape.getAllGeometries();
+            //shape.get
             String realName = name;
             if(allStaticMesh.containsKey(name)){
                 String[] names = name.split("_");

@@ -8,6 +8,7 @@ package spoed.Engine;
 import java.util.LinkedList;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Quat4d;
 import javax.vecmath.Vector2d;
@@ -172,6 +173,10 @@ public class GTransform implements GITransformation{
         rotation3.mul(tranlation3);
         rotation3.get(l);
         
+        f.normalize();
+        u.normalize();
+        l.normalize();
+        
         forwardVector = f;
         upVector = u;
         leftVector = l;
@@ -327,7 +332,6 @@ public class GTransform implements GITransformation{
             return new Vector3d(0, (u.x < 0)? Math.PI/2. : -Math.PI/2. , Math.atan(u.y / u.x));
         
         Vector3d angle = new Vector3d(0, 0, 0);
-        double d = Math.sqrt((u.x * u.x) + (u.z * u.z));
         double Ox = Math.atan(u.y / u.z);
         double Oy = Math.atan(u.x / u.z);
         
@@ -339,5 +343,37 @@ public class GTransform implements GITransformation{
             angle.y = Oy;
         }
         return angle;
+    }
+    public static void toEuler( Matrix3d matrix, Vector3d euler ) {
+        Vector3d v3d = new Vector3d();
+        
+        Vector3d zAxis = new Vector3d( 0, 0, -1 );
+        Vector3d yAxis = new Vector3d( 0, 1, 0 );
+        Vector3d xAxis = new Vector3d( 1, 0, 0 );
+
+        v3d.set( xAxis );
+        matrix.transform( v3d );
+        v3d.x = Math.abs( v3d.x );
+        v3d.z = 0;
+        v3d.normalize();
+
+        euler.x = xAxis.angle( v3d );
+
+        v3d.set( yAxis );
+        matrix.transform( v3d );
+        v3d.z = Math.abs( v3d.z );
+        v3d.x = 0;
+        v3d.normalize();
+
+        euler.y = yAxis.angle( v3d );
+
+        v3d.set( zAxis );
+        matrix.transform( v3d );
+        v3d.y = 0;
+        v3d.normalize();
+
+        euler.z = zAxis.angle( v3d );
+        if (v3d.x<0)
+            euler.z = 2*Math.PI-euler.z;
     }
 }

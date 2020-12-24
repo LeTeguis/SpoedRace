@@ -26,17 +26,38 @@ public class GMesh implements GITransformation{
     protected String name = null;
     protected Material material = null;
     protected Texture texture = null;
+    //
+    private String ID_Key = null;
 
-    public GMesh(String name, BranchGroup shape) {
-        loadMesh(name, shape);
+    public GMesh(String name, BranchGroup shape, String key) {
+        loadMesh(name, shape, key);
     }
     public GMesh(){
     }
-    public void loadMesh(String name, BranchGroup shape){
+    public void loadMesh(String name, BranchGroup shape, String key){
         this.name = name;
         this.mesh = shape;
         initTransformGroup(mesh);
         initParent(transform);
+    }
+    public GMesh cloneMesh(){
+        GMesh mesh = GLoad3DAssetsManager.getMesh(ID_Key);
+        if(mesh != null){
+            mesh.setPosition(this.getPosition());
+            mesh.setLocalRotation(mesh.getLocalOrientation());
+            return mesh;
+        }
+        BranchGroup meshs = (BranchGroup) this.mesh.cloneNode(true);
+        mesh = new GMesh(name, meshs, ID_Key);
+        if(mesh != null){
+            mesh.setPosition(this.getPosition());
+            mesh.setLocalRotation(mesh.getLocalOrientation());
+            return mesh;
+        }
+        return null;
+    }
+    public String getID_Key(){
+        return ID_Key;
     }
     public boolean isMeshName(String name){
         if(this.name.equals(name))
