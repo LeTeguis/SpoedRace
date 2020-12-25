@@ -334,7 +334,7 @@ public class GTransform implements GITransformation{
         Vector3d angle = new Vector3d(0, 0, 0);
         double Ox = Math.atan(u.y / u.z);
         double Oy = Math.atan(u.x / u.z);
-        
+        System.out.println("Ox : "+(Ox*180./Math.PI)+"; Oy : "+(Oy*180./Math.PI));
         if(u.z > 0){
             angle.x = Ox;
             angle.y = Oy + Math.PI;
@@ -343,6 +343,34 @@ public class GTransform implements GITransformation{
             angle.y = Oy;
         }
         return angle;
+    }
+    public static double toRadian(double degre){
+        return degre*Math.PI/180.0;
+    }
+    public static double toDegre(double radian){
+        return radian*180.0/Math.PI;
+    }
+    public void lookAt(Point3d objet){
+        Transform3D t3d= new Transform3D();
+        this.transformGroup.getTransform(t3d);
+        Vector3d up = new Vector3d();
+        t3d.lookAt(this.getPosition(), objet, up);
+        System.out.println("lookAt : "+GTransform.multily(up, 180./Math.PI));
+    }
+    public static void toEuler(GMesh mesh, Vector3d euler){
+        TransformGroup t = mesh.getTransform().transformGroup;
+        Transform3D t3d = new Transform3D();
+        t.getTransform(t3d);
+        Matrix3d m = new Matrix3d();
+        t3d.get(m);
+        toEuler(m, euler);
+    }
+    public static void toEuler(Vector3d u, Vector3d euler){
+        Transform3D t3d = new Transform3D();
+        t3d.setTranslation(u);
+        Matrix3d m = new Matrix3d();
+        t3d.get(m);
+        toEuler(m, euler);
     }
     public static void toEuler( Matrix3d matrix, Vector3d euler ) {
         Vector3d v3d = new Vector3d();

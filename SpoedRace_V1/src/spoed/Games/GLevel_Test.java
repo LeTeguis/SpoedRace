@@ -47,16 +47,19 @@ public class GLevel_Test extends GLevels{
     
     public GLevel_Test(int width, int height) {
         super(width, height);
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/peugeot-308/peugeot-308.obj");
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Decor1/decor1.obj");
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/obs.obj");
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/voiture.obj");
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/bugatti_1.obj");
-        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/direction.obj");
+        //GLoad3DAssetsManager.getInstance().loadModel("datas/Models/peugeot-308/peugeot-308.obj");
+        //GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Decor1/decor1.obj");
+        //GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/obs.obj");
+        //GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/voiture.obj");
+        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/bugatti.obj");
+        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/peugeot.obj");
+        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/voiture/truck.obj");
+        GLoad3DAssetsManager.getInstance().loadModel("datas/Models/terrain/route_t.obj");
+        //GLoad3DAssetsManager.getInstance().loadModel("datas/Models/Obs/direction.obj");
         cameraTPS = new GCamera();
         cameraTPS.init();
         //cameraTPS.setPosition(new Point3d(6f, 0f, 0f));
-        cameraTPS.setPosition(new Point3d(0f, 2.5f, -6f));
+        cameraTPS.setPosition(new Point3d(-85, 5, -44));
         cameraTPS.localRotationX(-15);
         cameraTPS.localRotationY(180);
         //cameraTPS.setLocalRotation(new Vector3d(-15, 180, 0));
@@ -100,26 +103,21 @@ public class GLevel_Test extends GLevels{
         zoom.setSchedulingBounds(new BoundingSphere());
         parent.addChild(zoom);
         
-        GMesh decor = GLoad3DAssetsManager.getMesh("cube");
-        
-        decor.move(new Vector3d(0, -1, 0));
-        decor.scale(new Vector3d(100,100,100));
-        
         GCar car = new GCar();
+        car.chargerVoiture("bugatti","datas/Models/voiture/");
+        car.setPosition(new Point3d(-85, 2, -35));
+        car.setCamera(cameraTPS);
         parent.addChild(car.getParent());
         
-        /*
-        steering_wheel_torus.001
-        car_plane.002
-        sphere
-        sweethome3d_window_mirror_plane.001
-        car.001_plane.003
-        */
+        GMesh route = GLoad3DAssetsManager.getMesh("route_t");
+        parent.addChild(route.getParent());
+        GMesh peugeot = GLoad3DAssetsManager.getMesh("peugeot");
+        parent.addChild(peugeot.getParent());
         
         //DirectionalLight soleil = new DirectionalLight(new Color3f(255, 234, 159), new Vector3f(0,0,0));
         
         // Ajout de la lumiere a l'objet racine de la scene 3D
-        //parent.addChild(/**/createLight()/** /createSpotLight(new Vector3d(0, 0, 0))/**/);
+        parent.addChild(/**/createLight()/** /createSpotLight(new Vector3d(0, 0, 0))/**/);
         GLight lumier = new GLight();
         parent.addChild(lumier.getParent());
         parent.addChild(GEvent.getInstance());
@@ -134,16 +132,16 @@ public class GLevel_Test extends GLevels{
         objTrans.setCapability (TransformGroup.ALLOW_TRANSFORM_WRITE) ;
         objTrans.setCapability (TransformGroup.ALLOW_TRANSFORM_READ) ;
         objTrans.setCapability (TransformGroup.ENABLE_PICK_REPORTING) ;
-        Color3f spotLightColor = new Color3f (1.0f, 0.0f, 0.0f) ;
+        Color3f spotLightColor = new Color3f (.10f, 0.10f, 0.10f) ;
         Cone cone = new Cone (0.1f, 0.15f) ;
-        cone.getShape (0).getGeometry ().setCapability(Geometry.ALLOW_INTERSECT) ;
-        cone.getShape (1).getGeometry ().setCapability(Geometry.ALLOW_INTERSECT) ;
-        objTrans.addChild (cone) ;
-        Point3f position = new Point3f (0.0f, 0.0f, 0.0f) ;
-        Point3f attenuation = new Point3f (1.0f, 1.0f, 1.0f) ;
+        cone.getShape(0).getGeometry().setCapability(Geometry.ALLOW_INTERSECT) ;
+        cone.getShape(1).getGeometry().setCapability(Geometry.ALLOW_INTERSECT) ;
+        //objTrans.addChild (cone) ;
+        Point3f position = new Point3f (0.0f, 3.0f, 0.0f) ;
+        Point3f attenuation = new Point3f (.10f, .10f, .10f) ;
         Vector3f direction = new Vector3f (0.0f, -1.0f, 0.0f) ;
-        float spreadAngle = (float)Math.PI/2 ;
-        float concentration = 0.0f ;
+        float spreadAngle = (float)Math.PI/2.0f ;
+        float concentration = 1.0f ;
         SpotLight spot = new SpotLight (true, spotLightColor, position, attenuation, direction, spreadAngle, concentration) ;
         spot.setInfluencingBounds (bounds) ;
         objTrans.addChild (spot) ;

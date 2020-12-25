@@ -5,10 +5,17 @@
  */
 package spoed.Engine;
 
+//import com.realvue.sim.ui.loader.java3d.max3ds.*;
+import com.microcrowd.loader.java3d.max3ds.Loader3DS;
 import com.sun.j3d.loaders.Loader;
 import com.sun.j3d.loaders.Scene;
 import com.sun.j3d.loaders.lw3d.Lw3dLoader;
 import com.sun.j3d.loaders.objectfile.ObjectFile;
+import com.sun.j3d.utils.image.TextureLoader;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -21,12 +28,13 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+import javax.media.j3d.Appearance;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Link;
-import javax.media.j3d.Node;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.SharedGroup;
-
+import javax.media.j3d.Texture;
+import javax.media.j3d.Texture2D;
 /**
  *
  * @author TTRS_And_BTJB
@@ -39,6 +47,10 @@ public class GLoad3DAssetsManager {
     private static Hashtable<String, SharedGroup> allStaticMesh = new Hashtable<String, SharedGroup>();
     
     private GLoad3DAssetsManager() {
+    }
+    public static void removeMesh(GMesh mesh){
+        if(containNameMesh(mesh.getName()))
+            allMesh.remove(mesh);
     }
     public static Link getStaticMesh(String name){
         if(!allStaticMesh.isEmpty() && allStaticMesh.containsKey(name)){
@@ -146,22 +158,27 @@ public class GLoad3DAssetsManager {
         }
     }
     public void loadModel(String file){
-        if(file.contains(".obj")){
+        if(file.contains(".obj")||file.contains(".3ds")||file.contains(".lws")||file.contains(".lwo")){
             Scene scene = loadWavefrontObject(file);
             listscenenamedobjects(scene);
         }
     }
     private Scene loadWavefrontObject(String filename) {
-        ObjectFile waveFrontObject = new ObjectFile(ObjectFile.TRIANGULATE);
+        //System.out.println("spoed.Engine.GLoad3DAssetsManager.loadWavefrontObject()");
+        ObjectFile waveFrontObject = new ObjectFile(ObjectFile.STRIPIFY|ObjectFile.TRIANGULATE);
         Loader lw3dLoader = new Lw3dLoader(Loader.LOAD_ALL);
+        Loader3DS loader3DS = new Loader3DS();
         Scene scene = null;
         
         File file = new File(filename);
+        
         try {
-            //scene = waveFrontObject.load(file.toURI().toURL());
+            System.out.println(file.toURI().toURL());
+            scene = waveFrontObject.load(file.toURI().toURL());
             //scene = waveFrontObject.load(filename);
             //scene = lw3dLoader.load(file.toURI().toURL());
-            scene = lw3dLoader.load(filename);
+            //scene = lw3dLoader.load(filename);
+            //scene = loader3DS.load(filename);
         }catch (Exception e) {
             System.err.println(e+"*****************");
             System.exit(1);
@@ -171,11 +188,14 @@ public class GLoad3DAssetsManager {
     private static void listscenenamedobjects(Scene scene) {
         Map<String, Shape3D> namemap = scene.getNamedObjects(); 
         int k = 0;
+        //System.out.println("spoed.Engine.GLoad3DAssetsManager.listscenenamedobjects()");
         for (String name : namemap.keySet()) {
             System.out.println(name);
             Shape3D shape = namemap.get(name);
+            if(shape == null)
+                continue;
             scene.getSceneGroup().removeChild(namemap.get(name));
-            Enumeration enumerate = shape.getAllGeometries();
+            //Enumeration enumerate = shape.getAllGeometries();
             //shape.get
             String realName = name;
             if(allStaticMesh.containsKey(name)){
@@ -199,11 +219,47 @@ public class GLoad3DAssetsManager {
                     index++;
                 }
             }
-            //shape.
             SharedGroup sg = new SharedGroup();
+            /*Color brown = new Color(165, 42, 42);
+            Canvas c = new Canvas();
+            Appearance brownAppearance = getAppearance("peugeot-308-texture.jpg",new Container(),2);
+            shape.setAppearance(brownAppearance);*/
+            
+            /*
+            TextureLoader loader = new TextureLoader("C:\\Users\\Sawyera\\Desktop\\Paint Layer 1.jpg","RGP", new Container());
+            Texture texture = loader.getTexture();
+            texture.setBoundaryModeS(Texture.WRAP);
+            texture.setBoundaryModeT(Texture.WRAP);
+            texture.setBoundaryColor(new Color4f(0.0f, 1.0f, 0.0f, 0.0f));
+            TextureAttributes texAttr = new TextureAttributes();
+            texAttr.setTextureMode(TextureAttributes.MODULATE);
+            Appearance ap = new Appearance();
+            ap.setTexture(texture);
+            ap.setTextureAttributes(texAttr);
+            int primflags = Primitive.GENERATE_NORMALS+ Primitive.GENERATE_TEXTURE_COORDS;
+            ObjectFile loader = new ObjectFile(ObjectFile.RESIZE);
+            model.setAppearance(ap);
+            //*/
+            
             sg.addChild(shape);
             allStaticMesh.put(realName, sg);
         }
+    }
+    public static Appearance getAppearance(String path, Component canvas, int dimension) {
+        Appearance appearance = new Appearance();
+        appearance.setTexture(getTexture(path, canvas, dimension));
+        return appearance;
+    }
+
+    public static Texture getTexture(String path, Component canvas, int dimension) {
+        //TextureLoader textureLoader = new TextureLoader(path, canvas);
+        TextureLoader textureLoader = new TextureLoader(path,"RGP", new Container());
+        Texture2D texture = new Texture2D(Texture2D.BASE_LEVEL,  Texture2D.RGB, dimension, dimension); 
+
+        texture.setImage(0, textureLoader.getImage());
+        texture.setBoundaryModeS(Texture.WRAP);
+        texture.setBoundaryModeT(Texture.WRAP);
+        return texture;
     }
     public static void main(String[] args) {
         GLoad3DAssetsManager.getInstance().opendFile("datas/Models/peugeot-308/peugeot-308.obj", "datas/Models");

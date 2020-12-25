@@ -154,7 +154,7 @@ public abstract class GPawn implements GAbstract.GIAbstract, GITransformation {
 
     @Override
     public void localRotationY(double Oy) {
-        transform.localRotationZ(Oy);
+        transform.localRotationY(Oy);
     }
 
     @Override

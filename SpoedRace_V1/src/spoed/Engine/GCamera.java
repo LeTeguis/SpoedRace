@@ -44,8 +44,6 @@ public class GCamera implements GEvent.GIEvent, GAbstract.GIAbstract, GITransfor
     //
     private GEvent gameEvent;
     private GAbstract gameLoop;
-    //
-    private GMesh lookAtMe = null;
     // 
     private Vector3d vitesse = new Vector3d(0, 0, 0);
     private Vector3d vitesseRotation = new Vector3d(0, 0, 0);//*/
@@ -62,28 +60,31 @@ public class GCamera implements GEvent.GIEvent, GAbstract.GIAbstract, GITransfor
         gameLoop = GAbstract.getInstance();
         gameLoop.addGAbstract(this);
     }
-    public void lookAt(GMesh mesh){
-        lookAtMe = mesh;
-        lookAt();
-    }
-    public void lookAt(){
-        Point3d cameraPosition = this.getPosition();
-        Point3d meshPosition = lookAtMe.getPosition();
+    public void lookAt(Point3d point){
+        this.transform.lookAt(point);
+        //GTransform.toEuler(lookAtMe., vitesse);
+        /*Point3d cameraPosition = this.getPosition();
+        Point3d meshPosition = point;
+        //System.out.println(lookAtMe.getPosition()+"lookat");
         
         Vector3d Ucm = GTransform.vecteur(cameraPosition, meshPosition);
-        double constatnteRadial = 180/Math.PI;
+        
         double norme = Math.sqrt((Ucm.x*Ucm.x) + (Ucm.y*Ucm.y) + (Ucm.z*Ucm.z));
+        System.out.println("VNN"+Ucm);
         if(norme != 0){
             Ucm.x /= norme;
             Ucm.y /= norme;
             Ucm.z /= norme;
         }
-        Vector3d angle = GTransform.angleRotation(GTransform.multily(Ucm, 1));
-        angle.x = (angle.x*constatnteRadial)*(1);
-        angle.y = (angle.y*constatnteRadial)*(1);
-        angle.z = (angle.z*constatnteRadial)*(1);
+        double constanteRadial = 180/Math.PI;
+        System.out.println("VN"+Ucm);
+        Vector3d angle = GTransform.angleRotation(Ucm);
         
-        this.setLocalRotation(angle);
+        angle.x = (angle.x*constanteRadial)*(1);
+        angle.y = (angle.y*constanteRadial)*(1);
+        angle.z = (angle.z*constanteRadial)*(1);
+        System.out.println("angle"+angle+" : position"+this.getPosition());
+        this.setLocalRotation(angle);*/
     }
     public void init(){
         initViewer();
@@ -191,8 +192,9 @@ public class GCamera implements GEvent.GIEvent, GAbstract.GIAbstract, GITransfor
 
     @Override
     public void update(long times, long deltaTime) {
-        //this.localRotation(vitesseRotation);
-        //this.move(GTransform.multily(GTransform.multily(this.transform.forwardVector(),vitesseTranslation), 0.25));
+        /*this.localRotation(vitesseRotation);
+        this.move(GTransform.multily(GTransform.multily(this.transform.forwardVector(),vitesseTranslation), 0.25));
+        System.out.println(this.getPosition());*/
     }
 
     @Override
