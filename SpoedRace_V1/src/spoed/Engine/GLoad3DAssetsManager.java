@@ -5,8 +5,7 @@
  */
 package spoed.Engine;
 
-//import com.realvue.sim.ui.loader.java3d.max3ds.*;
-import com.microcrowd.loader.java3d.max3ds.Loader3DS;
+
 import com.sun.j3d.loaders.Loader;
 import com.sun.j3d.loaders.Scene;
 import com.sun.j3d.loaders.lw3d.Lw3dLoader;
@@ -167,7 +166,6 @@ public class GLoad3DAssetsManager {
         //System.out.println("spoed.Engine.GLoad3DAssetsManager.loadWavefrontObject()");
         ObjectFile waveFrontObject = new ObjectFile(ObjectFile.STRIPIFY|ObjectFile.TRIANGULATE);
         Loader lw3dLoader = new Lw3dLoader(Loader.LOAD_ALL);
-        Loader3DS loader3DS = new Loader3DS();
         Scene scene = null;
         
         File file = new File(filename);
